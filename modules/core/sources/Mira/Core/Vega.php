@@ -139,6 +139,20 @@ class Mira_Core_Vega extends Mira_Utils_Pretty_Row implements Mira_Utils_IVersio
         }
         $this->moveToRevision($rev);
     }
+
+    /**
+     * @access private
+     * @param $name
+     * @param $value
+     */
+    public function __set ($name, $value)
+    {
+        try {
+            return parent::__set($name, $value);
+        } catch (Exception $e) {
+            throw new Mira_Core_Exception_NotFoundException("Property $name was not found in " . $this->_currentType->name);
+        }
+    }
     
     /**
      * Does this vega need to be saved

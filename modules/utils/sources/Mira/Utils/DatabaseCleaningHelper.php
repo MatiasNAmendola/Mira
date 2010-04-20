@@ -56,6 +56,7 @@ class Mira_Utils_DatabaseCleaningHelper
         
         // re-create the structure
         try {
+            // @non_sql_agnostic
             $dbAdapter->query($string);
         } catch (Zend_Exception $e) {
             print('error recreating sql structure\n');

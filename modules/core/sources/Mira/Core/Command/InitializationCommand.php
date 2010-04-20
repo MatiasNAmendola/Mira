@@ -63,7 +63,10 @@ class Mira_Core_Command_InitializationCommand extends Mira_Utils_Event_AbstractC
         $this->_config = new Zend_Config_Ini($this->_configFile, $this->_env);
         Zend_Registry::set(Mira_Core_Constants::REG_CONFIG, $this->_config);
 
-        $timezone = $this->_config->base->timezone;
+        if (isset($this->_config->base->timezone))
+            $timezone = $this->_config->base->timezone;
+        else 
+            $timezone = "Europe/Paris";
         date_default_timezone_set($timezone);
     }
     
@@ -78,6 +81,33 @@ class Mira_Core_Command_InitializationCommand extends Mira_Utils_Event_AbstractC
         $dbAdapter->setFetchMode(Zend_Db::FETCH_OBJ);
         Zend_Db_Table_Abstract::setDefaultAdapter($dbAdapter);
         Zend_Registry::set(Mira_Core_Constants::REG_DBADAPTER, $dbAdapter);
+        
+        // are our tables created ?
+        try {
+            $dbAdapter->select()->from(Mira_Core_Constants::TABLE_VEGA)->limit(1)->fetchOne();
+        } catch (Exception $e) {
+            $this->createMiraDatabase($dbAdapter);
+        }
+    }
+    
+    /**
+     * @access private
+     */
+    private function createMiraDatabase($dbAdapter) 
+    {
+        $sqlDump = dirname(__FILE__) . "/../Db/dump.sql";
+        $file_handle = fopen($sqlDump, "r");
+        $string = '';
+        while (! feof($file_handle)) {
+            $string = $string . fgetss($file_handle);
+        }
+        fclose($file_handle);
+        
+        try {
+            $dbAdapter->query($string);
+        } catch (Zend_Exception $e) {
+            throw new Mira_Core_Exception("Error creating Mira database");
+        }
     }
     
     /**
@@ -98,9 +128,11 @@ class Mira_Core_Command_InitializationCommand extends Mira_Utils_Event_AbstractC
      */
     private function initLogs()
     {
-        $params = $this->_config->log;
-        $params = $params->toArray();
-        $log = Zend_Log::factory($params);
-        Zend_Registry::set(Mira_Core_Constants::REG_LOG, $log);
+        if (isset($this->_config->log)) {
+            $params = $this->_config->log;
+            $params = $params->toArray();
+            $log = Zend_Log::factory($params);
+            Zend_Registry::set(Mira_Core_Constants::REG_LOG, $log);
+        }
     }
 }

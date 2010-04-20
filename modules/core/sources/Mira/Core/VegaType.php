@@ -693,6 +693,7 @@ class Mira_Core_VegaType extends Mira_Utils_Pretty_Row implements Mira_Utils_IVe
     */
 	public function setOwner($value)
 	{
+	    if (!$value) return;
 		if ($value instanceof Mira_Core_User) {
 			$this->_nextRevStore->base["id_usr_vgt"] = $value->id_usr;
 		} else if (is_int($value)) {

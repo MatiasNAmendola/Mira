@@ -44,11 +44,13 @@ require_once "Mira.php";
  */
 class Mira_Core_Test_TestCase extends PHPUnit_Framework_TestCase
 {
-    protected static $sqldump = "dump_tests.sql";
-    protected static $config = "config.ini";
+    protected static $sqldump;
+    protected static $config;
     
     public static function setUpBeforeClass()
     {
+        if (!self::$sqldump) self::$sqldump = dirname(__FILE__) . "/../Db/dump.sql";
+        if (!self::$config) self::$config = "config.ini";
         self::initalizeTests(self::$sqldump, self::$config);
     }
     
@@ -58,6 +60,7 @@ class Mira_Core_Test_TestCase extends PHPUnit_Framework_TestCase
             
             // instantiate Mira
             Mira::init($config, "test");
+            
             // clean database
             $dbAdapter = Zend_Registry::get(Mira_Core_Constants::REG_DBADAPTER); 
             $dbCleaner = new Mira_Utils_DatabaseCleaningHelper();

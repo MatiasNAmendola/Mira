@@ -117,7 +117,7 @@ class Mira
     
     static private $_initialized; 
     static private $_env; 
-    static private $_defaultApiLevel = "locked";
+    static private $_defaultApiLevel = "system";
     
     /**
      * pass null to use the value defined in the config file (key = base.miralevel)
@@ -153,32 +153,30 @@ class Mira
      * @param string $configFile path to .ini config file
      * @param string $env any string to describe your runtime config ("production", "test" or "development" for instance)
      */
-    static public function init($configFile, $env = "development")
+    static public function init($configFile, $env = null)
     {
-        if (!self::$_initialized) {
-        	// setup autoloader
-            require_once "Zend/Loader/Autoloader.php";
-            $autoloader = Zend_Loader_Autoloader::getInstance();
-            $autoloader->setFallbackAutoloader(true);
-            $autoloader->suppressNotFoundWarnings(true);
-            // environment
-            self::$_env = $env;
-            // bus
-            self::$bus = $bus = new Mira_Utils_Event_CommandBus();
-            Zend_Registry::set(Mira_Core_Constants::REG_BUS, $bus);
-            self::registerCommands($bus);
-            // InitializationCommand
-            $bus->dispatchNewEvent("initialize", array("configFile" => $configFile, "env" => $env));
-            
-            $conf = Zend_Registry::get(Mira_Core_Constants::REG_CONFIG);
-            if (isset($conf->base->miralevel)) self::$_defaultApiLevel = $conf->base->miralevel; 
-            self::$_initialized = true;
+    	// setup autoloader
+        require_once "Zend/Loader/Autoloader.php";
+        $autoloader = Zend_Loader_Autoloader::getInstance();
+        $autoloader->setFallbackAutoloader(true);
+        $autoloader->suppressNotFoundWarnings(true);
+        // environment
+        self::$_env = $env;
+        // bus
+        self::$bus = $bus = new Mira_Utils_Event_CommandBus();
+        Zend_Registry::set(Mira_Core_Constants::REG_BUS, $bus);
+        self::registerCommands($bus);
+        // InitializationCommand
+        $bus->dispatchNewEvent("initialize", array("configFile" => $configFile, "env" => $env));
+        
+        $conf = Zend_Registry::get(Mira_Core_Constants::REG_CONFIG);
+        if (isset($conf->base->miralevel)) self::$_defaultApiLevel = $conf->base->miralevel; 
+        self::$_initialized = true;
 
-            // core api used by low level components
-            // that one cannot be steteful, so its session functions are dsiabled
-            $api = new Mira_Core_InternalMira("system");
-            Zend_Registry::set(Mira_Core_Constants::REG_API, $api);
-        }
+        // core api used by low level components
+        // that one cannot be steteful, so its session functions are dsiabled
+        $api = new Mira_Core_InternalMira("system");
+        Zend_Registry::set(Mira_Core_Constants::REG_API, $api);
     }
     
     /**
@@ -510,5 +508,19 @@ class Mira
         
         throw new Exception("unrecognized method $method.");
     }
-    
+}
+
+function print_vega($vega) 
+{
+    if ($vega && $vega instanceof Mira_Core_Vega) {
+        print "\n\n$vega->name (" . $vega->type->name . ")";
+        foreach ($vega->getVegaProperties() as $key => $value) {
+            if ($value instanceof Mira_Core_Vega)
+                print "\n. $key = $value->name";
+            elseif (!is_object($value))
+                print "\n. $key = $value";
+        }
+    } else {
+        print "\nArgument is not a Mira_Core_Vega";
+    }
 }

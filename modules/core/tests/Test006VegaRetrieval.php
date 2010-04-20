@@ -9,7 +9,6 @@ class Test006VegaRetrieval extends Mira_Core_Test_TestCase
 	
 	public static function setUpBeforeClass()
     {
-        self::$sqldump = dirname(__FILE__) . '/../../../resources/tests/dump.sql';
         self::$config = dirname(__FILE__) . '/../../../resources/tests/config.ini';
         parent::setUpBeforeClass();
     }
