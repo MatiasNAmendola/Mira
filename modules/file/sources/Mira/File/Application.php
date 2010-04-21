@@ -41,17 +41,6 @@ class Mira_File_Application extends Mira_Core_Application_Abstract
     // @var string
     private $_baseUrl;
 
-    /**
-     * @return FileServer
-     */
-    public static function getInstance ()
-    {
-        if (null === self::$_instance) {
-            self::$_instance = new self();
-        }
-        return (self::$_instance);
-    }
-
     public function __construct($filesPath = null, $baseUrl = null)
     {
         $this->api = Zend_Registry::get(Mira_Core_Constants::REG_API);
@@ -60,11 +49,11 @@ class Mira_File_Application extends Mira_Core_Application_Abstract
         $root = Zend_Registry::get(Mira_Core_Constants::REG_ROOT);
         
         $conf = Zend_Registry::get(Mira_Core_Constants::REG_CONFIG);
-	    if (Mira_Core_Utils_String::isEmpty($baseUrl)) {
+	    if (Mira_Utils_String::isEmpty($baseUrl)) {
             $base = $conf->base->toArray();
             $baseUrl = $base["url"];	        
 	    }
-	    if (Mira_Core_Utils_String::isEmpty($filesPath) || !is_dir($filesPath)) {
+	    if (Mira_Utils_String::isEmpty($filesPath) || !is_dir($filesPath)) {
             $files = $conf->files->toArray();
 	        $filesPath = $files["path"]; 
 	    }

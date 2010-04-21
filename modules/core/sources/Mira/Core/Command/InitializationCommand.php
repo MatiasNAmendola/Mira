@@ -84,7 +84,8 @@ class Mira_Core_Command_InitializationCommand extends Mira_Utils_Event_AbstractC
         
         // are our tables created ?
         try {
-            $dbAdapter->select()->from(Mira_Core_Constants::TABLE_VEGA)->limit(1)->fetchOne();
+            $sel = $dbAdapter->select()->from(Mira_Core_Constants::TABLE_VEGA)->limit(1);
+            $dbAdapter->fetchOne($sel);
         } catch (Exception $e) {
             $this->createMiraDatabase($dbAdapter);
         }
@@ -106,7 +107,13 @@ class Mira_Core_Command_InitializationCommand extends Mira_Utils_Event_AbstractC
         try {
             $dbAdapter->query($string);
         } catch (Zend_Exception $e) {
-            throw new Mira_Core_Exception("Error creating Mira database");
+            $dbConfig = $dbAdapter->getConfig();
+            if (isset($dbConfig["dbname"])) {
+                $dbName = $dbConfig["dbname"]; 
+                throw new Mira_Core_Exception("Error creating Mira database. Have you created the db $dbName ?");
+            } else {
+                throw new Mira_Core_Exception("Error creating Mira database. Please check db settings inside $this->_configFile");
+            }
         }
     }
     
