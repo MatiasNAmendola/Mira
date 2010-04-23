@@ -46,15 +46,16 @@ class Mira_Core_Test_TestCase extends PHPUnit_Framework_TestCase
 {
     protected static $sqldump;
     protected static $config;
+    protected static $doResetDb = true;
     
     public static function setUpBeforeClass()
     {
         if (!self::$sqldump) self::$sqldump = dirname(__FILE__) . "/../Db/dump.sql";
         if (!self::$config) self::$config = "config.ini";
-        self::initalizeTests(self::$sqldump, self::$config);
+        self::initalizeTests(self::$sqldump, self::$config, self::$doResetDb);
     }
     
-    public static function initalizeTests($sqldump, $config)
+    public static function initalizeTests($sqldump, $config, $doResetDb)
     {
         if (!Zend_Registry::isRegistered('testInitialized')) {
             
@@ -62,9 +63,11 @@ class Mira_Core_Test_TestCase extends PHPUnit_Framework_TestCase
             Mira::init($config, "test");
             
             // clean database
-            $dbAdapter = Zend_Registry::get(Mira_Core_Constants::REG_DBADAPTER); 
-            $dbCleaner = new Mira_Utils_DatabaseCleaningHelper();
-            $dbCleaner->clean($dbAdapter, $sqldump);
+            if ($doResetDb) {
+                $dbAdapter = Zend_Registry::get(Mira_Core_Constants::REG_DBADAPTER); 
+                $dbCleaner = new Mira_Utils_DatabaseCleaningHelper();
+                $dbCleaner->clean($dbAdapter, $sqldump);
+            }
             
             Zend_Registry::set('testInitialized', true);
         }

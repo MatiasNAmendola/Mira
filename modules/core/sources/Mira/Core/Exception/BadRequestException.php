@@ -21,6 +21,11 @@
  */
 
 /**
+ * @see Mira_Core_Exception
+ */
+require_once "Mira/Core/Exception.php";
+
+/**
  * To be used whenever the requested function or service was not called correclty
  * (argument type/count mismatch, convention not respected etc...)
  *   

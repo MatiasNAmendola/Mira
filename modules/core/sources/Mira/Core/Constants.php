@@ -51,9 +51,7 @@ class Mira_Core_Constants
     const REG_API                 = "mira::api";    
     const REG_DBADAPTER           = "mira::dbAdapter";    
     const REG_ROOT                = "mira::root";    
-    const REG_FILESPATH           = "mira::filesPath";    
     const REG_CONFIG              = "mira::config";    
     const REG_LOG                 = "mira::log";    
     const REG_BUS                 = "mira::bus";    
-    const REG_LUCENEINDEXPATH     = "mira::luceneIndexPath";    
 }

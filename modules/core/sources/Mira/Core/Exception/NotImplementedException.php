@@ -21,6 +21,11 @@
  */
 
 /**
+ * @see Mira_Core_Exception
+ */
+require_once "Mira/Core/Exception.php";
+
+/**
  * The requested function or service is not yet implemented.
  * 
  * @category   Mira

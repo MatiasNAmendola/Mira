@@ -29,8 +29,6 @@ class Mira_File_Application extends Mira_Core_Application_Abstract
 {
     const REG_FILESPATH = "filesPath";
     
-    public static $_instance = null;
-    
     // @var Mira_Core_VegaType
     protected $vegaType = null;
     // @var Mira

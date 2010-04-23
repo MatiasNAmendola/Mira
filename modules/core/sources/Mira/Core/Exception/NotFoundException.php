@@ -21,6 +21,11 @@
  */
 
 /**
+ * @see Mira_Core_Exception
+ */
+require_once "Mira/Core/Exception.php";
+
+/**
  * @category   Mira
  * @package    Mira_Core
  * @subpackage Exception

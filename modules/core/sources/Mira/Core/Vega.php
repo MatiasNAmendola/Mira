@@ -53,10 +53,10 @@ class Mira_Core_Vega extends Mira_Utils_Pretty_Row implements Mira_Utils_IVersio
     public $thisId;
 
 	// @var Mira
-	private $api;
+	protected $api;
 
 	// @var Mira_Utils_Event_CommandBus
-	private $bus;
+	protected $bus;
     
     // whatever the vegatype version of the current vega is
     // the table name of the extension remains the same
