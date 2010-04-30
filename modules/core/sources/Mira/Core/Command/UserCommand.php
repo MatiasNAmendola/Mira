@@ -49,18 +49,17 @@ class Mira_Core_Command_UserCommand extends Mira_Utils_Event_AbstractCommand
         $config = Zend_Registry::get(Mira_Core_Constants::REG_CONFIG);
         $configFiles = $config->mail;
         $configFiles = $configFiles->toArray();
-        
         if($configFiles["validation"]) {
             $mail = new Zend_Mail ();
             $mail->setFrom ($configFiles['from'], 'Vega');
-            $path = $configFiles['url'];
+            $path = BASE_URL;
             $mail->addTo ($email, $email);
             $mail->setSubject ('Please validate your email');
             $mail->setBodyHtml ("<html><head></head>
                                  <body style='font-size:8px'>
                                  <p>Welcome To VEGA</p>
                                  <p>Confirm your email address enter the following link: 
-                                 <a href= '" . $path . "/validate/code/" . $token . "/email/" . $email . "'>here</a></p>
+                                 <a href= '" . $path . "/register/validate/token/" . $token . "/email/" . $email . "'>here</a></p>
                                  Thanks!! and Enjoy it
                                  </body></html>");
             return $mail->send ();
@@ -83,11 +82,11 @@ class Mira_Core_Command_UserCommand extends Mira_Utils_Event_AbstractCommand
         $configFiles = $config->mail;
         $configFiles = $configFiles->toArray();
         
-        if($configFiles["validation"]) {
+        if($configFiles["confirmation"]) {
             
             $mail = new Zend_Mail ();
             $mail->setFrom ($configFiles['from'], 'Vega');
-            $path = $configFiles['url'];
+            $path = BASE_URL;
             $mail->addTo ($email, $email);
             $mail->setSubject ('Vega registration confirmation');
             $mail->setBodyHtml ("<html><head></head>
@@ -116,18 +115,18 @@ class Mira_Core_Command_UserCommand extends Mira_Utils_Event_AbstractCommand
         $configFiles = $config->mail;
         $configFiles = $configFiles->toArray();
         
-        if($user && $configFiles["validation"]) {
+        if($user && $configFiles["recovery"]) {
             
             $mail = new Zend_Mail ();
             $mail->setFrom ($configFiles['from'], 'Vega');
-            $path = $configFiles['url'];
+            $path = BASE_URL;
             $mail->addTo ($email, $email);
             $mail->setSubject ('Vega registration confirmation');
             $mail->setBodyHtml ("<html><head></head>
             	                 <body style='font-size:8px'>
                 	             <p>VEGA</p>
                     	         <p>To Recover your password enter the following link: 
-                        	     <a href= '" . $path . "/passwordrecovery/code/" . $token . "/email/" . $email . "'>here</a></p>
+                        	     <a href= '" . $path . "/login/recover/token/" . $token . "/email/" . $email . "'>here</a></p>
                              	</body></html>");
             return $mail->send ();
             
