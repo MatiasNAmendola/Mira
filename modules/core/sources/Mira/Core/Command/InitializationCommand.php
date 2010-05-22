@@ -84,7 +84,7 @@ class Mira_Core_Command_InitializationCommand extends Mira_Utils_Event_AbstractC
         
         // are our tables created ?
         try {
-            $sel = $dbAdapter->select()->from(Mira_Core_Constants::TABLE_VEGA)->limit(1);
+            $sel = $dbAdapter->select()->from(Mira_Core_Constants::TABLE_VEGATYPE)->limit(1);
             $dbAdapter->fetchOne($sel);
         } catch (Exception $e) {
             $this->createMiraDatabase($dbAdapter);

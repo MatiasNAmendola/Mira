@@ -36,4 +36,28 @@ class Mira_Core_Contact extends Mira_Core_Vega
         $table = Mira_Core_Db_Tables::getInstance()->getUserTable();
         return $table->fetchAll("id_vg_usr = $vegaId", null, 1);
     }
+    
+    /**
+     * @return string concatenation of first and last names - "Mathieu Lemaire"
+     */
+    public function getFullname()
+    {
+    	$f = $this->__get("first name");
+    	$l = $this->__get("last name");
+    	if (!count($f) && !count($l)) {
+    		return $this->getPseudoFromEmail();
+    	} elseif (!count($f)) {
+    		return $l;
+    	} elseif (!count($l)) {
+    		return $f;
+    	} else {
+	    	return  $f . " " . $l;
+	    }
+    }
+    
+    private function getPseudoFromEmail()
+    {
+    	$pos = strpos($this->email, "@");
+    	return substr($this->email, 0, $pos);
+    }
 }
