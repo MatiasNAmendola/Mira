@@ -306,6 +306,16 @@ class Mira_Core_Scope extends Mira_Utils_Pretty_Row
         }
     }
     
+    const PUBLIC_USERID = 1; 
+    public function setPublicRole($role)
+    {
+        $this->addUserRole(self::PUBLIC_USERID, $role);    
+    }
+    public function getPublicRole()
+    {
+        return $this->getUserRole(self::PUBLIC_USERID);
+    }
+    
     /**
      * @param Mira_Core_User | integer $user
      */

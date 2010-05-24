@@ -29,7 +29,6 @@ class Test006VegaRetrieval extends Mira_Core_Test_TestCase
 	    
 		$vega = $api->vname("Andres PENA");
 		$this->assertSame($vega->name,"Andres PENA");
-		$this->assertEquals($vega->id,1);
 		$this->assertSame($vega->email,"ayn_nian@hotmail.com");
 	}
 	
@@ -50,7 +49,6 @@ class Test006VegaRetrieval extends Mira_Core_Test_TestCase
 		        ->where("name", "Andres P", "permissive")
 		        ->fetchAll();
 		$this->assertSame($vega[0]->name,"Andres PENA");
-		$this->assertEquals($vega[0]->id,1);
 		$this->assertSame($vega[0]->email,"ayn_nian@hotmail.com");
 		
 		//find a vega just by NameIntelli
@@ -58,7 +56,6 @@ class Test006VegaRetrieval extends Mira_Core_Test_TestCase
 		        ->where("name", "Andres P", "permissive")
 		        ->fetchAll();
 		$this->assertSame($vega[0]->name,"Andres PENA");
-		$this->assertEquals($vega[0]->id,1);
 		$this->assertSame($vega[0]->email,"ayn_nian@hotmail.com");
 	}
 	
@@ -73,9 +70,8 @@ class Test006VegaRetrieval extends Mira_Core_Test_TestCase
 	    $api->login($this->email, $this->pass);
 	    $user = $api->getUser();
 	    
-		$vega = $api->vid(1);
+		$vega = $api->vid(2);
 		$this->assertSame($vega->name, "Andres PENA");
-		$this->assertEquals($vega->id, 1);
 		$this->assertSame($vega->email, "ayn_nian@hotmail.com");
 	}
 	

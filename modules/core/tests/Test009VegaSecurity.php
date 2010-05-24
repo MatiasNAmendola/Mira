@@ -253,6 +253,47 @@ class Test009VegaSecurity extends Mira_Core_Test_TestCase
 	    
 	    //it should be Not Null
 	    $this->assertNotNull($vega);
+	}
+	
+	/**
+	 * @depends testCreateUser
+	 * 
+     * @codereview_owner maz
+     * @codereview_reviewer andres
+     * @codereview_status finished
+	 */
+	public function testPublicVisibilities()
+	{
+	    $api = new Mira("application");
+	    $api->login($this->email, $this->pass);
 	    
+	    $vega = $api->createVega($api->tfqn("Mira_Core_Contact"), "no public", $api->getUser());
+	    $vega->save();
+	    $privId = $vega->id; 
+	    
+	    $vega = $api->createVega($api->tfqn("Mira_Core_Contact"), "public view", $api->getUser());
+	    $vega->scope->setPublicRole(Mira_Core_Scope::ROLE_VIEWER);
+	    $vega->save();
+	    $viewId = $vega->id; 
+
+	    $vega = $api->createVega($api->tfqn("Mira_Core_Contact"), "public edit", $api->getUser());
+	    $vega->scope->setPublicRole(Mira_Core_Scope::ROLE_EDITOR);
+	    $vega->save();
+	    $editId = $vega->id; 
+	    
+	    $api->logout();
+	    $api->login($this->otherEmail, $this->otherPass);
+	    
+	    $vega = $api->vid($privId);
+	    $this->assertNull($vega);
+	    
+	    $vega = $api->vid($viewId);
+	    $this->assertNotNull($vega);
+	    
+	    $vega = $api->selectVegas()
+	                ->where("id", $editId)
+	                ->where("security", null, "editor")
+	                ->fetchObject();
+	    $this->assertNotNull($vega);
 	}
 }

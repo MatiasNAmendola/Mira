@@ -108,7 +108,8 @@ CREATE TABLE IF NOT EXISTS `user_usr` (
 -- Contenu de la table `user_usr`
 --
 
-INSERT INTO `user_usr` VALUES(1, 1, 'ayn_nian@hotmail.com', '80fced5eaac3847c5a61165305e80425ced8be68', 'a3b148229ff7109975e26d969fa7c9cd8e258d26', 'validated', 1234, '2009-04-14 17:02:38');
+INSERT INTO `user_usr` VALUES(1, 1, 'public@getvega.com', '80fced5eaac3847c5a61165305e80425ced8be68', 'a3b148229ff7109975e26d969fa7c9cd8e258d26', 'validated', 1234, '2009-04-14 17:02:38');
+INSERT INTO `user_usr` VALUES(2, 2, 'ayn_nian@hotmail.com', '80fced5eaac3847c5a61165305e80425ced8be68', 'a3b148229ff7109975e26d969fa7c9cd8e258d26', 'validated', 1234, '2009-04-14 17:02:38');
 
 -- --------------------------------------------------------
 
@@ -263,7 +264,9 @@ CREATE TABLE IF NOT EXISTS `vega_vg` (
 -- Contenu de la table `vega_vg`
 --
 INSERT INTO `vega_vg` (`id_vg`, `rv_vg`, `id_vgt_vg`, `rv_vgt_vg`, `id_usr_vg`, `id_scp_vg`, `name_vg`, `status_vg`, `date_created_vg`) VALUES
-(1, 1, 7, 1, 0, 1, 'Andres PENA', 'enabled', '2010-01-08 12:27:27');
+(1, 1, 7, 1, 0, 1, 'Public', 'enabled', '2010-01-08 12:27:27');
+INSERT INTO `vega_vg` (`id_vg`, `rv_vg`, `id_vgt_vg`, `rv_vgt_vg`, `id_usr_vg`, `id_scp_vg`, `name_vg`, `status_vg`, `date_created_vg`) VALUES
+(2, 1, 7, 1, 0, 1, 'Andres PENA', 'enabled', '2010-01-08 12:27:27');
 
 --
 -- Structure de la table `vega_7`
@@ -289,6 +292,8 @@ CREATE TABLE IF NOT EXISTS `vega_7` (
 --
 
 INSERT INTO `vega_7` (`id_vg`, `rv_vg`, `1`, `2`, `3`, `4`, `5`, `6`, `7`, `8`, `9`, `10`) VALUES
-(1, 1, 'andres', 'pena', NULL, 'ayn_nian@hotmail.com', NULL, NULL, NULL, NULL, NULL, NULL);
+(1, 1, 'Public', 'Public', NULL, 'public@getvega.com', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `vega_7` (`id_vg`, `rv_vg`, `1`, `2`, `3`, `4`, `5`, `6`, `7`, `8`, `9`, `10`) VALUES
+(2, 1, 'andres', 'pena', NULL, 'ayn_nian@hotmail.com', NULL, NULL, NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------

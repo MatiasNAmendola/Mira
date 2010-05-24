@@ -40,7 +40,7 @@ class Test007VegaRollback extends Mira_Core_Test_TestCase
 		$yoe = "years of experience";
 		$vega->$yoe = 0;
 		$vega->working = 0;
-		$vega->boss =  $api->vid(1);
+		$vega->boss =  $api->vname("Andres PENA");
 		$vega->save();
 		
 		//testing the Vega
