@@ -749,22 +749,23 @@ class Mira_Core_VegaType extends Mira_Utils_Pretty_Row implements Mira_Utils_IVe
 	 * @access private
 	 * @return array
 	 */
-	public function getVegaProperties()
+	public function getVegaProperties($ignoreInternal = false)
 	{
 		$ret = array();
 		if (!$this->isBrandNew()) {
 			foreach ($this->_currentVegaProperties as $property) {
 				if (       !isset($this->_nextRevStore->properties->removed[$property->id_prp])
-				&& !isset($this->_nextRevStore->properties->edited[$property->id_prp])) {
+				&& !isset($this->_nextRevStore->properties->edited[$property->id_prp])
+				&& (!$ignoreInternal || strpos($property->name, "__") !== 0)) {
 					$ret[] = $property;
 				}
 			}
 		}
 		foreach ($this->_nextRevStore->properties->added as $property) {
-			$ret[] = $property;
+			if (!$ignoreInternal || strpos($property->name, "__") !== 0) $ret[] = $property;
 		}
 		foreach ($this->_nextRevStore->properties->edited as $property) {
-			$ret[] = $property;
+			if (!$ignoreInternal || strpos($property->name, "__") !== 0) $ret[] = $property;
 		}
 
 		return $ret;
@@ -808,7 +809,7 @@ class Mira_Core_VegaType extends Mira_Utils_Pretty_Row implements Mira_Utils_IVe
 		if ($prop) {
 			$this->removeProperty($prop);
 		} else {
-			throw new Error("The property $propertyId was not found");
+			throw new Mira_Core_Exception_NotFoundException("Property $propertyId");
 		}
 	}
 

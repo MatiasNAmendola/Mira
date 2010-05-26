@@ -164,7 +164,7 @@ class Mira_Core_Property extends Mira_Utils_Pretty_Row
             case 3: return "varchar (100)";
             case 4: return "text";
             case 5: return "tinyint (1)";
-            case 6: return "varchar (200)";
+            case 6: return "varchar (2000)"; // we can have long urls
         }
         return "text";
     }

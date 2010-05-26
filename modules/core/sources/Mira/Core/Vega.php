@@ -150,7 +150,7 @@ class Mira_Core_Vega extends Mira_Utils_Pretty_Row implements Mira_Utils_IVersio
         try {
             return parent::__set($name, $value);
         } catch (Exception $e) {
-            throw new Mira_Core_Exception_NotFoundException("Property $name was not found in " . $this->_currentType->name);
+            throw new Mira_Core_Exception_NotFoundException("Property $name in " . $this->_currentType->name);
         }
     }
     
@@ -450,13 +450,15 @@ class Mira_Core_Vega extends Mira_Utils_Pretty_Row implements Mira_Utils_IVersio
     /**
      * @return array array of prop name => value
      */
-    public function getVegaProperties()
+    public function getVegaProperties($ignoreInternal = false)
     {
         $props = $this->_currentType->getVegaProperties();
         $ret = array();
         foreach ($props as $prop) {
             $propName = $prop->name;
-            $ret[$propName] = $this->$propName;
+            if (!$ignoreInternal || strpos($propName, "__") !== 0) {
+                $ret[$propName] = $this->$propName;
+            }
         }
         return $ret;
     }
