@@ -83,17 +83,6 @@ class Mira_Core_Db_Tables
     /**
      * @return Mira_Core_Db_Table
      */
-    public function getPrimitiveTable()
-    {
-        if (!isset($this->_tables["primitive"])) {
-            $this->_tables["primitive"] = new Mira_Core_Db_Table('primitive_prm', 'Mira_Core_Primitive', true, 'prm');
-        }
-        return $this->_tables["primitive"];
-    }
-    
-    /**
-     * @return Mira_Core_Db_Table
-     */
     public function getScopeTable()
     {
         if (!isset($this->_tables["scope"])) {

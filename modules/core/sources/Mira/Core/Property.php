@@ -86,12 +86,14 @@ class Mira_Core_Property extends Mira_Utils_Pretty_Row
  	            if ($value instanceof Mira_Core_Primitive) {
                     $prm = $value;
  	            } elseif (Mira_Utils_String::isId($value)) {
- 	        	    $prm = Mira_Core_Db_Tables::getInstance()->getPrimitiveTable()->findById($value);
+ 	                $app = Zend_Registry::get(Mira_Core_Constants::REG_PRIM_APPLICATION);
+ 	        	    $prm = $app->findById($value);
  	            } else {
- 	        	    $prm = Mira_Core_Db_Tables::getInstance()->getPrimitiveTable()->fetchRow("name_prm = '" . $value . "'" );
+ 	                $app = Zend_Registry::get(Mira_Core_Constants::REG_PRIM_APPLICATION);
+ 	        	    $prm = $app->findByName($value);
  	            }
  	        	if ($prm) {
- 	                $this->type_id_prm_prp = $prm->id_prm;
+ 	                $this->type_id_prm_prp = $prm->id;
  	        	} else {
  	        		throw new Mira_Core_Exception_BadRequestException("Property type not recognized $value");
  	        	}

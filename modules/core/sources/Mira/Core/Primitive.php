@@ -29,51 +29,10 @@
  * @copyright  Copyright (c) 2010 Vega (http://www.getvega.com)
  * @license    http://www.opensource.org/licenses/bsd-license.php     New BSD License
  */
-class Mira_Core_Primitive extends Mira_Utils_Pretty_Row
+class Mira_Core_Primitive
 {
-    /**
-     * this is used by AMF to specify remote AS classname
-     * @access private
-     * @var string
-     */
-    public $_explicitType = "com.vega.core.api.vega.VegaPrimitive";
-    
- 	public function __construct($config)
- 	{
- 	    // this table exposed properties
- 	    $properties = array();
- 	    $properties[] = new Mira_Utils_Pretty_Property_Delegate($this, "id", false, true, "baseProperty", "id_prm");
- 	    $properties[] = new Mira_Utils_Pretty_Property_Delegate($this, "name", false, true, "baseProperty", "name_prm");
- 	    $properties[] = new Mira_Utils_Pretty_Property_Delegate($this, "sqltype", false, true, "baseProperty", "sqltype_prm");
- 	    
- 	    parent::__construct($config, $properties);
- 	}
-
-   /**
-     * internal
-     * 
-     * You can retrieve properties simply by doing :
-     * <code>
-     * $id = $primitive->id;
-     * $name = $primitive->name;
-     * $type = $primitive->sqlType;
-     * </code>
-     * 
-     * @access private
-     * @param string $localName
-     * @return mixed
-     */
-    public function getBaseProperty($localName)
-    {
-        return parent::__get($localName);
-    }
- 	    
-    /**
-     * @return integer 
-     */
-    public function save()
-    {
-        parent::save();
-    }
-    
+    public $name;
+    public $id;
+    public $sqlType;
+    public $internal;
 }

@@ -51,6 +51,7 @@ class Mira_Core_Command_InitializationCommand extends Mira_Utils_Event_AbstractC
         $this->initDatabase();
         $this->initMail();
         $this->initLogs();
+        $this->initPrimitives();
     }
 
     // INTERNALS
@@ -141,5 +142,16 @@ class Mira_Core_Command_InitializationCommand extends Mira_Utils_Event_AbstractC
             $log = Zend_Log::factory($params);
             Zend_Registry::set(Mira_Core_Constants::REG_LOG, $log);
         }
+    }
+    
+    /**
+     * @access private
+     */
+    private function initPrimitives()
+    {
+        $app = new Mira_Core_Primitive_Application();
+        $app->install();
+        $app->start();
+        Zend_Registry::set(Mira_Core_Constants::REG_PRIM_APPLICATION, $app);
     }
 }

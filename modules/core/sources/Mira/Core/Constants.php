@@ -54,4 +54,5 @@ class Mira_Core_Constants
     const REG_CONFIG              = "mira::config";    
     const REG_LOG                 = "mira::log";    
     const REG_BUS                 = "mira::bus";    
+    const REG_PRIM_APPLICATION    = "mira::primApp";    
 }

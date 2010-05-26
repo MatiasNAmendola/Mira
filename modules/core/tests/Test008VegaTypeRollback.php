@@ -33,7 +33,7 @@ class Test008VegaTypeRollback extends Mira_Core_Test_TestCase
 		
 		//creating properties
 		$nameProp = $vegaType->createProperty("First Name", 1);
-		$softProp = $vegaType->createProperty("Software", 1);
+		$softProp = $vegaType->createProperty("Software", "Number");
 		$workProp = $vegaType->createProperty("Working", 5);
 		$vegaTypeProp = $vegaType->createProperty("Recommended", $contactVegaType);
         
@@ -45,6 +45,7 @@ class Test008VegaTypeRollback extends Mira_Core_Test_TestCase
 		$this->assertEquals(count($vegaType->getVegaProperties()), 4);
 		$this->assertEquals($vegaType->propertyWithName("First Name")->name, "First Name");
 		$this->assertEquals($vegaType->propertyWithName("Software")->name, "Software");
+		$this->assertEquals($vegaType->propertyWithName("Software")->type, 1);
 		$this->assertEquals($vegaType->propertyWithName("Working")->name, "Working");
 		$this->assertEquals($vegaType->propertyWithName("Working")->type, 5);
 		$this->assertEquals($vegaType->propertyWithName("Recommended")->name, "Recommended");
