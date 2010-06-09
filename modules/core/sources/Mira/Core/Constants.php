@@ -55,4 +55,5 @@ class Mira_Core_Constants
     const REG_LOG                 = "mira::log";    
     const REG_BUS                 = "mira::bus";    
     const REG_PRIM_APPLICATION    = "mira::primApp";    
+    const REG_CREATE_REVISIONS    = "mira::createRevs";    
 }

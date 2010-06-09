@@ -258,13 +258,16 @@ class Mira
     public function login($email = null, $password = null)
     {
         if ($this->_authLevel > self::AUTHLEVEL_NOT_SET) {
+            if ($email == "public@getvega.com") {
+                throw new Mira_Core_Exception_BadRequestException("Cannot login as $email");
+            }
         	self::$bus->dispatchEvent(new Mira_Core_Event_LogEvent("Login $email", Zend_Log::DEBUG));
             return $this->auth->login($email, $password);
         } else if (!$email) {
         	self::$bus->dispatchEvent(new Mira_Core_Event_LogEvent("Login from session", Zend_Log::DEBUG));
             return $this->auth->login();
         } else {
-            throw new Exception("Your API key is not suitable for this operation (trying to relogin). Ask for a 'system' or 'application' API Key to your Vega administrator.");
+            throw new Mira_Core_Exception_BadRequestException("Your API key is not suitable for this operation (trying to relogin). Ask for a 'system' or 'application' API Key to your Vega administrator.");
         }
     }
     
@@ -279,7 +282,7 @@ class Mira
         if ($this->_authLevel > self::AUTHLEVEL_NOT_SET) {
             $this->auth->logout();
         } else {
-            throw new Exception("Your API key is not suitable for this operation (trying to logout). Ask for a 'system' or 'application' API Key to your Vega administrator.");
+            throw new Mira_Core_Exception_BadRequestException("Your API key is not suitable for this operation (trying to logout). Ask for a 'system' or 'application' API Key to your Vega administrator.");
         }
     }
     
@@ -295,7 +298,7 @@ class Mira
         if ($this->_authLevel > self::AUTHLEVEL_NOT_SET) {
             $this->auth->user = $user;
         } else {
-            throw new Exception("Your API key is not suitable for this operation (trying to change session user). Ask for a 'system' or 'application' API Key to your Vega administrator.");
+            throw new Mira_Core_Exception_BadRequestException("Your API key is not suitable for this operation (trying to change session user). Ask for a 'system' or 'application' API Key to your Vega administrator.");
         }
     }
     
@@ -473,10 +476,10 @@ class Mira
     {
         $matches = array();
         
-        if (!count($args)) throw new Exception("wrong argument count for method $method.");
+        if (!count($args)) throw new Mira_Core_Exception_BadRequestException("Wrong argument count for method $method.");
         
         if (preg_match('/^(u|v|t)(\w+?)(?:and(\w+?))*(_)?$/', $method, $matches)) {
-            if (!count($matches)) throw new Exception("wrong argument count for method $method.");
+            if (!count($matches)) throw new Mira_Core_Exception_BadRequestException("Wrong argument count for method $method.");
             
             $sel = null;
             
@@ -486,13 +489,13 @@ class Mira
                 case "u":    $sel = $this->selectUsers(); break;
                 case "v":    $sel = $this->selectVegas(); break;
                 case "t":    $sel = $this->selectVegaTypes(); break;
-                default:     throw new Exception("unrecognized method $method.");
+                default:     throw new Mira_Core_Exception_BadRequestException("Unrecognized method $method.");
             }
             
             // WHERES
             $all = $matches[count($matches)-1] == "_";
             for ($i = 2; $i <= ($all ? count($matches) - 2 : count($matches) - 1); $i++) {
-                if (count($args) <= $i-2) throw new Exception("wrong argument count for method $method.");
+                if (count($args) <= $i-2) throw new Mira_Core_Exception_BadRequestException("Wrong argument count for method $method.");
                 $selector = strtolower($matches[$i]);
                 $value = $args[$i - 2];
                 $sel->where($selector, $value);
@@ -506,7 +509,7 @@ class Mira
             }
         }
         
-        throw new Exception("unrecognized method $method.");
+        throw new Mira_Core_Exception_BadRequestException("Unrecognized method $method.");
     }
 }
 

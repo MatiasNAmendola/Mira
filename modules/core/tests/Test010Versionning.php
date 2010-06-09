@@ -81,4 +81,32 @@ class Test010Versionning extends Mira_Core_Test_TestCase
     	$this->assertTrue($vega->hasNext());
     }
     
+    /**
+     * @codereview_owner maz
+     * @codereview_reviewer andres
+     * @codereview_status finished
+     */
+    public function testNoRevision()
+    {
+        $api = new Mira("application");
+        $api->login($this->email,$this->pass);
+        $user = $api->getUser();
+        
+    	$vegaType = $api->tname("Contact");
+    	$vega = $api->createVega($vegaType, "Not versioned", $user);
+    	$vega->__set("first name", "Maz");
+    	$vega->save(false);
+    	
+    	$vega = $api->vid($vega->id);
+    	$this->assertSame("1", $vega->revision);
+    	$this->assertSame($vega->__get("first name"), "Maz");
+        
+    	$vega->__set("first name", "Farf");
+    	$vega->save(false);
+
+    	$vega = $api->vid($vega->id);
+    	$this->assertSame("1", $vega->revision);
+    	$this->assertSame($vega->__get("first name"), "Farf");
+    }
+    
 }
