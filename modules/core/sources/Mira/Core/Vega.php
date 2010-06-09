@@ -691,8 +691,12 @@ class Mira_Core_Vega extends Mira_Utils_Pretty_Row implements Mira_Utils_IVersio
      * 
      * @return integer vega's id
      */
-    public function save()
+    public function save($createRevision = null)
     {
+        if ($createRevision === null) {
+            $createRevision = Zend_Registry::get(Mira_Core_Constants::REG_CREATE_REVISIONS);
+        }
+        
         // check that some modifications have been performed
         if (!$this->isDirty()) return;
         
@@ -703,10 +707,10 @@ class Mira_Core_Vega extends Mira_Utils_Pretty_Row implements Mira_Utils_IVersio
         $db->beginTransaction();
         
         try {
-            // @var integer
-            $nextRevisionNumber = $this->getLatestRevisionNumber() + 1;
             // @var boolean
-            $isBrandNew = ($nextRevisionNumber == 1);
+            $isBrandNew = $this->isBrandNew();
+            // @var integer
+            $nextRevisionNumber = ($createRevision || $isBrandNew) ? $this->getLatestRevisionNumber() + 1 : $this->_currentRevision;
             // @var array
             $nr = $this->_nextRow;
             
@@ -744,7 +748,11 @@ class Mira_Core_Vega extends Mira_Utils_Pretty_Row implements Mira_Utils_IVersio
                 // @var Mira_Core_Scope
                 $newScope = null;
                 if (isset($this->_currentScope->id_scp)) { 
-                    $newScope = $this->_currentScope->duplicate();
+                    if ($createRevision) {
+                        $newScope = $this->_currentScope->duplicate();
+                    } else {
+                        $newScope = $this->_currentScope;
+                    }
                     $this->_currentScope = $newScope;
                 } else if ($this->_currentScope) {
                     $newScope = $this->_currentScope;
@@ -779,11 +787,15 @@ class Mira_Core_Vega extends Mira_Utils_Pretty_Row implements Mira_Utils_IVersio
             
             
             // ########################
-            // A - INSERT THE NEW DATA
+            // B - INSERT THE NEW DATA
             // ########################
             
             // 1 - insert base
-            $db->insert(Mira_Core_Constants::TABLE_VEGA, $base);
+            if ($createRevision || $isBrandNew) {
+                $db->insert(Mira_Core_Constants::TABLE_VEGA, $base);
+            } else {
+                $db->update(Mira_Core_Constants::TABLE_VEGA, $base, "id_vg = " . $this->thisId . " AND rv_vg = " . $nextRevisionNumber);
+            }
             // retrieve the id
             if ($isBrandNew) {
                 $this->thisId = $db->lastInsertId(Mira_Core_Constants::TABLE_VEGA, "id_vg");
@@ -792,9 +804,23 @@ class Mira_Core_Vega extends Mira_Utils_Pretty_Row implements Mira_Utils_IVersio
             // 2 - insert extension row (primitives)
             $newProps_prim["id_vg"] = $this->thisId;
             $newProps_prim["rv_vg"] = $nextRevisionNumber;
-            $db->insert($this->_extensionTableName, $newProps_prim);
+            if ($createRevision || $isBrandNew) {
+                $db->insert($this->_extensionTableName, $newProps_prim);
+            } else {
+                $db->update($this->_extensionTableName, $newProps_prim, "id_vg = " . $this->thisId . " AND rv_vg = " . $nextRevisionNumber);
+            }
             
             // 3 - create vega properties links
+            if (!$createRevision && !$isBrandNew) {
+                $sql = "DELETE " . Mira_Core_Constants::TABLE_VEGALINK_PROPERTY . ".*, " . 
+                                   Mira_Core_Constants::TABLE_VEGALINK . ".*" .
+                       " FROM " .           Mira_Core_Constants::TABLE_VEGALINK_PROPERTY . 
+                           " INNER JOIN " . Mira_Core_Constants::TABLE_VEGALINK .
+                           " ON id_vgl_vlp = id_vgl " .
+                       " WHERE from_id_vg_vgl = " . $this->thisId . 
+                           " AND from_rv_vg_vgl = " . $nextRevisionNumber;
+                $db->query($sql);
+            }
             foreach ($newProps_vega as $vegaPropertyId=>$linkVegaId) {
                 // insert vegalink
                 $db->insert(Mira_Core_Constants::TABLE_VEGALINK, 
@@ -811,7 +837,7 @@ class Mira_Core_Vega extends Mira_Utils_Pretty_Row implements Mira_Utils_IVersio
             }
         
             // 4 - duplicate generic links (other than vega properties)
-            if (!$isBrandNew) {
+            if (!$isBrandNew && $createRevision) {
                 $sql = "INSERT INTO vegalink_vgl (from_id_vg_vgl, from_rv_vg_vgl, to_id_vg_vgl, id_vlt_vgl) " . 
                         "SELECT from_id_vg_vgl, $nextRevisionNumber, to_id_vg_vgl, id_vlt_vgl  FROM `vegalink_vgl`  " .
                         "LEFT OUTER JOIN vegalink_property_vlp ON id_vgl_vlp = id_vgl  " .
@@ -821,7 +847,7 @@ class Mira_Core_Vega extends Mira_Utils_Pretty_Row implements Mira_Utils_IVersio
             } 
             
             // 5 - disable last version
-            if (!$isBrandNew) {
+            if (!$isBrandNew && $createRevision) {
                 $db->update(Mira_Core_Constants::TABLE_VEGA,
                     array("status_vg" => "disabled"), 
                     "id_vg = " . $this->thisId . " and rv_vg = " . $this->_currentRevision);

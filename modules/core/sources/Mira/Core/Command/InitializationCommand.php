@@ -63,6 +63,10 @@ class Mira_Core_Command_InitializationCommand extends Mira_Utils_Event_AbstractC
     {
         $this->_config = new Zend_Config_Ini($this->_configFile, $this->_env);
         Zend_Registry::set(Mira_Core_Constants::REG_CONFIG, $this->_config);
+        Zend_Registry::set(Mira_Core_Constants::REG_CONFIG, $this->_config);
+        
+        $cr = isset($this->_config->base->createRevisions) && $this->_config->base->createRevisions;
+        Zend_Registry::set(Mira_Core_Constants::REG_CREATE_REVISIONS, $cr);
 
         if (isset($this->_config->base->timezone))
             $timezone = $this->_config->base->timezone;
