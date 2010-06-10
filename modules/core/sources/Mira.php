@@ -192,11 +192,7 @@ class Mira
     static protected function registerCommands($bus)
     {
         $bus->registerCommand("*", "Mira_Core_Command_LogCommand", "logBusEvent"); 
-        $bus->registerCommand("initialize", "Mira_Core_Command_InitializationCommand"); 
-        $bus->registerCommand(Mira_Core_Event_UserEvent::CREATE, "Mira_Core_Command_UserCommand", "sendValidationEmail"); 
-        $bus->registerCommand(Mira_Core_Event_UserEvent::VALIDATE, "Mira_Core_Command_UserCommand", "sendConfirmationEmail"); 
-        $bus->registerCommand(Mira_Core_Event_UserEvent::CMD_RECOVER_PASSWORD, "Mira_Core_Command_UserCommand", "sendRecoverPasswordEmail"); 
-        $bus->registerCommand(Mira_Core_Event_UserEvent::CMD_VALIDATE_EMAIL, "Mira_Core_Command_UserCommand", "sendValidationEmail");  
+        $bus->registerCommand("initialize", "Mira_Core_Command_InitializationCommand");  
     }
     
     /**

@@ -49,7 +49,6 @@ class Mira_Core_Command_InitializationCommand extends Mira_Utils_Event_AbstractC
         $this->loadConfig();
         
         $this->initDatabase();
-        $this->initMail();
         $this->initLogs();
         $this->initPrimitives();
     }
@@ -119,19 +118,6 @@ class Mira_Core_Command_InitializationCommand extends Mira_Utils_Event_AbstractC
             } else {
                 throw new Mira_Core_Exception("Error creating Mira database. Please check db settings inside $this->_configFile");
             }
-        }
-    }
-    
-    /**
-     * @access private
-     */
-    private function initMail()
-    {
-        if (isset($this->_config->mail->smtp)) {
-            $params = $this->_config->mail->smtp;
-            $smtp = $params->toArray();
-            $mailTransport = new Zend_Mail_Transport_Smtp($smtp['smtp'],$smtp['params']);
-            Zend_Mail::setDefaultTransport($mailTransport);
         }
     }
     

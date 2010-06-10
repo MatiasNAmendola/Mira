@@ -177,7 +177,7 @@ class Mira_Core_User extends Mira_Utils_Pretty_Row
         
         if ($isNew) {
             $this->account_status_usr = 'validating';
-            $this->token_usr = rand(0,10000);
+            if (!$this->token_usr || $this->token_usr == "") $this->token_usr = Mira_Utils_String::randomString(20, "alphanumeric");
         }
         
         // if a new password has been set, then we need to encrypt it before

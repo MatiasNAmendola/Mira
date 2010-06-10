@@ -98,7 +98,7 @@ CREATE TABLE IF NOT EXISTS `user_usr` (
   `pass_usr` varchar(40) NOT NULL,
   `salt_usr` varchar(40) NOT NULL,
   `account_status_usr` varchar(40) DEFAULT NULL,
-  `token_usr` bigint(20) DEFAULT NULL,
+  `token_usr` varchar(255) DEFAULT NULL,
   `date_created_usr` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id_usr`),
   KEY `fk_vg_usr` (`id_vg_usr`)

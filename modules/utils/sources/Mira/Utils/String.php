@@ -57,4 +57,36 @@ class Mira_Utils_String {
     {
         return !$value || $value == "";    
     }
+    
+    public static function randomString($length = 10, $chars = '1234567890') {
+    
+        // Alpha lowercase
+        if ($chars == 'alphalower') {
+            $chars = 'abcdefghijklmnopqrstuvwxyz';
+        }
+    
+        // Numeric
+        if ($chars == 'numeric') {
+            $chars = '1234567890';
+        }
+    
+        // Alpha Numeric
+        if ($chars == 'alphanumeric') {
+            $chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
+        }
+    
+        // Hex
+        if ($chars == 'hex') {
+            $chars = 'ABCDEF1234567890';
+        }
+    
+        $charLength = strlen($chars)-1;
+    
+        $randomString = "";
+        for($i = 0 ; $i < $length ; $i++) {
+            $randomString .= $chars[mt_rand(0,$charLength)];
+        }
+    
+        return $randomString;
+    }
 }
