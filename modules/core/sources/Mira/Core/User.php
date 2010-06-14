@@ -176,8 +176,10 @@ class Mira_Core_User extends Mira_Utils_Pretty_Row
         $contact = $this->getContact();
         
         if ($isNew) {
-            $this->account_status_usr = 'validating';
-            if (!$this->token_usr || $this->token_usr == "") $this->token_usr = Mira_Utils_String::randomString(20, "alphanumeric");
+            if (Mira_Utils_String::isEmpty($this->account_status_usr)) 
+                $this->account_status_usr = 'validating';
+            if (Mira_Utils_String::isEmpty($this->token_usr)) 
+                $this->token_usr = Mira_Utils_String::randomString(20, "alphanumeric");
         }
         
         // if a new password has been set, then we need to encrypt it before
