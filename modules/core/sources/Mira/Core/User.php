@@ -245,5 +245,15 @@ class Mira_Core_User extends Mira_Utils_Pretty_Row
     {
         return "user|$id";
     }
+    
+    /**
+     * Delete the user row and its vega contact
+     */
+    public function delete()
+    {
+        $this->getContact()->fullDelete();
+        return parent::delete();
+        
+    }
 }
  
