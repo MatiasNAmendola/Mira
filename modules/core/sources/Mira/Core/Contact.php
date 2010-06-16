@@ -44,11 +44,11 @@ class Mira_Core_Contact extends Mira_Core_Vega
     {
     	$f = $this->__get("first name");
     	$l = $this->__get("last name");
-    	if (!count($f) && !count($l)) {
+    	if (Mira_Utils_String::isEmpty($f) && Mira_Utils_String::isEmpty($l)) {
     		return $this->getPseudoFromEmail();
-    	} elseif (!count($f)) {
+    	} elseif (Mira_Utils_String::isEmpty($f)) {
     		return $l;
-    	} elseif (!count($l)) {
+    	} elseif (Mira_Utils_String::isEmpty($l)) {
     		return $f;
     	} else {
 	    	return  $f . " " . $l;
