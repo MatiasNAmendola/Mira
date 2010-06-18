@@ -133,10 +133,12 @@ class Mira_Core_Scope extends Mira_Utils_Pretty_Row
     {
         $ret = array();
         foreach ($this->_userId2role as $userId => $role) {
+            if ($userId == self::PUBLIC_USERID) continue;
             $r = new Mira_Core_UserRole();
             $r->user = Zend_Registry::get(Mira_Core_Constants::REG_API)->uid($userId);
             $r->role = $role;
-            $ret[] = $r;
+            if ($r->user && $r->role)
+                $ret[] = $r;
         }
         return $ret;
     }
@@ -314,6 +316,14 @@ class Mira_Core_Scope extends Mira_Utils_Pretty_Row
     public function getPublicRole()
     {
         return $this->getUserRole(self::PUBLIC_USERID);
+    }
+    
+    /**
+     */
+    public function removePublicRole()
+    {
+        $this->_dirty = true;
+        unset($this->_userId2role[self::PUBLIC_USERID]);        
     }
     
     /**
