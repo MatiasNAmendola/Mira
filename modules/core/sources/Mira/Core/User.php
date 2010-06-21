@@ -253,7 +253,9 @@ class Mira_Core_User extends Mira_Utils_Pretty_Row
      */
     public function delete()
     {
-        $this->getContact()->fullDelete();
+        $vega = $this->api->selectVegas($this->api->selectVegaTypes()->where("fqn", "Mira_Core_Contact"))
+                    ->where("id", $this->id_vg_usr)->fetchObject();
+        $vega->fullDelete();
         return parent::delete();
         
     }
