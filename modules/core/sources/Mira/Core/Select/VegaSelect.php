@@ -706,6 +706,7 @@ class Mira_Core_Select_VegaSelect extends Mira_Core_Select_Abstract
         $roleWhere = " ";
         if ($role) $roleWhere = " AND role_scc = '$role'";
         $retSel->where("(id_usr_scc = $userId $roleWhere) OR (id_usr_scc = " . Mira_Core_Scope::PUBLIC_USERID . " $roleWhere) OR id_usr_vg = 0");
+        $retSel->group(array("id_vg", "rv_vg"));
         
         return $retSel;
     }

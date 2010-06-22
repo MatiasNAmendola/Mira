@@ -141,6 +141,7 @@ class Test003VegaCreation extends Mira_Core_Test_TestCase
 		$vegaType = $api->tname("Contact");
 		//testing the Vega
 		$vega = $api->vid($vega->id);
+		$this->assertNotNull($vega);
 		$this->assertSame("1st Developper",$vega->name);
 		$this->assertSame("Mauricio",$vega->$firstName);
 		$this->assertSame("Carmona",$vega->$lastName);

@@ -196,7 +196,7 @@ class Mira_Core_Select_UserSelect extends Mira_Core_Select_Abstract
     {
         if (!$args) return $select;
         list ($selector, $value, $config) = $args;
-        $select->where($this->currentAlias . ".token_usr = $value");    
+        $select->where($this->currentAlias . ".token_usr = \"$value\"");    
         return $select;        
     }
     
