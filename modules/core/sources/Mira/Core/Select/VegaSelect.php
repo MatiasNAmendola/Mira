@@ -389,13 +389,29 @@ class Mira_Core_Select_VegaSelect extends Mira_Core_Select_Abstract
             list ($selector, $value, $config) = $args;
             if (!$value) $value = $this->api->getUser();
             $userId = $value instanceof Mira_Core_User ? $value->id : $value;
-            if ($config == "editor")
-                $select->from(array($this->currentAlias => self::generateAuthVegasSql($this->table, $userId, 'editor')), array("$this->currentAlias.*"));
-            elseif ($config == "viewer")
-                $select->from(array($this->currentAlias => self::generateAuthVegasSql($this->table, $userId, null)), array("$this->currentAlias.*"));
-            elseif ($config == "viewer_only")
-                $select->from(array($this->currentAlias => self::generateAuthVegasSql($this->table, $userId, 'viewer')), array("$this->currentAlias.*"));
-            elseif ($config == "none") { 
+            
+            $lookInPublic = true;
+            $role = "viewer";
+            if (is_array($config)) {
+                $lookInPublic = (isset($config["public"]) && $config["public"] === true);
+                $role = isset($config["role"]) ? $config["role"] : "viewer";
+            } else {
+                $role = $config;
+            }
+            
+            if ($role == "editor")
+                $select->from(
+                    array($this->currentAlias => self::generateAuthVegasSql($this->table, $userId, 'editor', "", $lookInPublic)), 
+                    array("$this->currentAlias.*"));
+            elseif ($role == "viewer")
+                $select->from(
+                    array($this->currentAlias => self::generateAuthVegasSql($this->table, $userId, null, "", $lookInPublic)), 
+                    array("$this->currentAlias.*"));
+            elseif ($role == "viewer_only")
+                $select->from(
+                    array($this->currentAlias => self::generateAuthVegasSql($this->table, $userId, 'viewer', "", $lookInPublic)), 
+                    array("$this->currentAlias.*"));
+            elseif ($role == "none") { 
                 // @todo implement  
             }    
             return $select;
@@ -695,7 +711,7 @@ class Mira_Core_Select_VegaSelect extends Mira_Core_Select_Abstract
      * @param string $asPrefix prefixes to the aliases
      * @return Zend_Db_Table_Select
      */
-    private static function generateAuthVegasSql ($vegaTable, $userId, $role = null, $aliasPrefix = '')
+    private static function generateAuthVegasSql ($vegaTable, $userId, $role = null, $aliasPrefix = '', $lookInPublic = true)
     {
         $retSel = $vegaTable->select()->setIntegrityCheck(false);
         $VG = Mira_Core_Constants::TABLE_VEGA;
@@ -705,7 +721,8 @@ class Mira_Core_Select_VegaSelect extends Mira_Core_Select_Abstract
         
         $roleWhere = " ";
         if ($role) $roleWhere = " AND role_scc = '$role'";
-        $retSel->where("(id_usr_scc = $userId $roleWhere) OR (id_usr_scc = " . Mira_Core_Scope::PUBLIC_USERID . " $roleWhere) OR id_usr_vg = 0");
+        $publicCondition = $lookInPublic ? " OR (id_usr_scc = " . Mira_Core_Scope::PUBLIC_USERID . " $roleWhere)  OR id_usr_vg = 0 " : "";
+        $retSel->where("(id_usr_scc = $userId $roleWhere) " . $publicCondition);
         $retSel->group(array("id_vg", "rv_vg"));
         
         return $retSel;

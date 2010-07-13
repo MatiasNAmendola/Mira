@@ -290,9 +290,9 @@ class Mira_Core_Scope extends Mira_Utils_Pretty_Row
         $userId = intval(($user instanceof Mira_Core_User) ? $user->id : $user);
         if (isset($this->_userId2role[$userId])) {
             return $this->_userId2role[$userId];
-        } else {
-            return null;
-        }
+        } else if (isset($this->_userId2role[self::PUBLIC_USERID])) {
+            return $this->_userId2role[self::PUBLIC_USERID];
+        } else return null;
     }
     
     /**
