@@ -203,6 +203,14 @@ class Mira
         return self::$bus;
     }
     
+    /**
+     * @return string
+     */
+    public static function getEnv()
+    {
+        return self::$_env;
+    }
+    
     // ###################################################
     // API SETTINGS / SECURITY
     // ###################################################

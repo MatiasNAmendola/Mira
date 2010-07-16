@@ -53,12 +53,15 @@ class Mira_Core_Primitive_Application extends Mira_Core_Application_Abstract
 	{
 	    $allPrms = array();
 	    
-	    $config = Zend_Registry::get(Mira_Core_Constants::REG_CONFIG);
-	    if (!isset($config->primitive) || !count($config->primitive)) {
-	        throw new Exception("No primitives declared. Edit your Mira ini file.");
+	    $envConf = Zend_Registry::get(Mira_Core_Constants::REG_CONFIG);
+	    if (isset($envConf->app->list->config)) {
+	        $configPath = MIRA_ROOT . "/" . $envConf->app->primitive->config;
+	    } else {
+	        $configPath = MIRA_ROOT . "/application/resources/app.primitive.conf";
 	    }
-	    
-	    $prims = $config->primitive->toArray();
+        $config = new Zend_Config_Ini($configPath, Mira::getEnv());
+        
+	    $prims = $config->toArray();
 	    foreach ($prims as $key => $prim) {
             $allPrms[] = $this->parsePrimitive($key, $prim);	        
 	    }
