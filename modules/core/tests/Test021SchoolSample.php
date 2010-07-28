@@ -270,6 +270,62 @@ class Test021SchoolSample extends Mira_Core_Test_TestCase
         $this->assertSame(count($resultAll) - count($v_regularTeachers) - 1, count($resultDir));
     }
     
+    /**
+     * @depends Test020Selects::testApiCreation
+     * @depends testCreateTypes
+     * @depends testCreateVegas
+     * 
+     * @codereview_owner maz
+     * @codereview_reviewer farf
+     * @codereview_status accepted
+     */
+    public function testGenericLinks($api, $createTypesReturn, $createVegasReturn)
+    {
+        list ($t_school, $t_department, $t_teacher, $t_student) = $createTypesReturn;
+        list ($v_school, list($v_herve, $v_tea_Cabaret, $v_tea_IT, $v_tea_MA), list($v_stu_SA, $v_stu_IT, $v_stu_MA), list($v_dep_SA, $v_dep_IT, $v_dep_MA), $v_regularTeachers) = $createVegasReturn;
+        
+        $stu1 = $v_stu_SA[0];
+        $stu2 = $v_stu_SA[1];
+        $stu3 = $v_stu_IT[0];
+        $stu4 = $v_stu_MA[0];
+        $stu5 = $v_stu_MA[1];
+        
+        // simulate friend ships
+        $stu1->addGenericLink($stu2->id);
+        $stu2->addGenericLink($stu3->id);
+        $stu3->addGenericLink($stu1->id);
+        $stu3->addGenericLink($stu2->id);
+        
+        // get friends stu3 has declared
+        $sel = $api->selectVegas($t_student)
+                   ->linkedTo($stu3,     
+                             Mira_Core_Select_VegaSelect::LINK_TYPE_GENERIC, 
+                             Mira_Core_Select_VegaSelect::LINK_DIRECTION_TO)
+                   ->fetchAll();
+        $this->assertSame(2, count($sel));
+        
+        // remove 1 friendship
+        $stu3->deleteGenericLink($stu1->id);
+        
+        // get friends stu3 has declared
+        $sel = $api->selectVegas($t_student)
+                         ->linkedTo($stu3,     
+                             Mira_Core_Select_VegaSelect::LINK_TYPE_GENERIC, 
+                             Mira_Core_Select_VegaSelect::LINK_DIRECTION_TO)
+                         ->fetchAll();
+        $this->assertSame(1, count($sel));
+
+        // get guys that declared stu3 as friend
+        $sel = $api->selectVegas($t_student)
+                         ->linkedTo($stu3,     
+                             Mira_Core_Select_VegaSelect::LINK_TYPE_GENERIC, 
+                             Mira_Core_Select_VegaSelect::LINK_DIRECTION_FROM)
+                         ->fetchAll();
+        $this->assertSame(1, count($sel));
+        $s = $sel[0];
+        $this->assertSame($stu2->id, $s->id);
+    }
+    
     // ###################################################
     // UTILS
     // ###################################################

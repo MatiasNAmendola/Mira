@@ -59,6 +59,8 @@ class Mira_Core_Test_TestCase extends PHPUnit_Framework_TestCase
     {
         if (!Zend_Registry::isRegistered('testInitialized')) {
             
+            define("MIRA_ROOT", dirname(__FILE__) . "/../../../../../../");
+            
             // instantiate Mira
             Mira::init($config, "test");
             

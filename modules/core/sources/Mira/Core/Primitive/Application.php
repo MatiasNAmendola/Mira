@@ -57,7 +57,7 @@ class Mira_Core_Primitive_Application extends Mira_Core_Application_Abstract
 	    if (isset($envConf->app->list->config)) {
 	        $configPath = MIRA_ROOT . "/" . $envConf->app->primitive->config;
 	    } else {
-	        $configPath = MIRA_ROOT . "/application/resources/app.primitive.conf";
+	        $configPath = MIRA_ROOT . "/resources/tests/app.primitive.conf";
 	    }
         $config = new Zend_Config_Ini($configPath, Mira::getEnv());
         
