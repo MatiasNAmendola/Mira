@@ -997,7 +997,8 @@ class Mira_Core_Vega extends Mira_Utils_Pretty_Row implements Mira_Utils_IVersio
                 	->where("from_id_vg_vgl = " . $this->thisId . 
                 			" AND from_rv_vg_vgl = " . $this->revision . 
                 			" AND to_id_vg_vgl = " . $toVegaId . 
-                			" AND id_vlt_vgl = 2");
+                			" AND id_vlt_vgl = 2")
+			->group("id_vgl");
         $cnt = $this->getTable()->getAdapter()->fetchRow($sel,array(),Zend_Db::FETCH_NUM);
         if ($cnt[0] > 0) return $cnt[1];
         
