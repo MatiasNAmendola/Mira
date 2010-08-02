@@ -61,7 +61,7 @@ class Mira_Core_Auth extends Zend_Auth {
     /**
      * @return boolean
      */
-    public function login($email = null, $password = null) 
+    public function login($email = null, $password = null, $from = null) 
     {
         if ($email) {
             $user = $this->api->uemail($email);
@@ -70,7 +70,8 @@ class Mira_Core_Auth extends Zend_Auth {
                 $data = array ('pass_usr' => $password,
                                'salt_usr' => $salt_usr,
                                'email_usr' => $email);
-                $data = Mira_Utils_PasswordEncryption::encryptPassword($data);
+                if($from == "facebook") $data['pass_usr'] = $user->pass_usr;
+                else $data = Mira_Utils_PasswordEncryption::encryptPassword($data);
                 $password = $data['pass_usr'];
             	$this->adapter->setIdentity($email);
             	$this->adapter->setCredential($password);
