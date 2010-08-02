@@ -73,6 +73,7 @@ class Mira_Core_Auth extends Zend_Auth {
                 if($from == "facebook") $data['pass_usr'] = $user->pass_usr;
                 else $data = Mira_Utils_PasswordEncryption::encryptPassword($data);
                 $password = $data['pass_usr'];
+                print_r($data);exit();
             	$this->adapter->setIdentity($email);
             	$this->adapter->setCredential($password);
             	$result = parent::authenticate($this->adapter);
