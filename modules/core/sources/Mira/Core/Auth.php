@@ -42,7 +42,7 @@ class Mira_Core_Auth extends Zend_Auth {
 	/**
 	 * @var Mira_Core_User
 	 */
-	public $user;
+	private $_user;
 	
     public function __construct($api) 
     {
@@ -55,7 +55,25 @@ class Mira_Core_Auth extends Zend_Auth {
     
     public function isLoggued() 
     {
-        return ($this->user !== null);
+        return ($this->_user !== null);
+    }
+    
+    public function getUser()
+    {
+        return $this->_user;
+    }
+    public function setUser($user) 
+    {
+        $this->_user = $user;
+    
+        $email = $this->getIdentity();
+        if ($email == $user->email) {
+            return; // npothing to commit into session
+        } else if ($email) {
+            $this->clearIdentity();
+        }
+        
+        $this->getStorage()->write($user->email);
     }
     
     /**
@@ -76,23 +94,25 @@ class Mira_Core_Auth extends Zend_Auth {
             	$this->adapter->setCredential($password);
             	$result = parent::authenticate($this->adapter);
             	if ($result->isValid()) {
-            	    $this->user = $user;
+            	    $this->_user = $user;
             	    return true;
             	} else {
-            	    $this->user = null;
+            	    $this->_user = null;
             	    return false;
             	}
             } else {
-        	    $this->user = null;
+        	    $this->_user = null;
         	    return false;
             }
         } else {
-            if ($this->hasIdentity()) { 
+            if ($this->_user) {
+                return true;
+            } else if ($this->hasIdentity()) { 
                 $email = $this->getIdentity();
-                $this->user = $this->api->uemail($email);
+                $this->_user = $this->api->uemail($email);
                 return true;
             } else {
-                $this->user = null;
+                $this->_user = null;
         	    return false;
             }
         }

@@ -300,7 +300,7 @@ class Mira
     public function setUser($user)
     {
         if ($this->_authLevel > self::AUTHLEVEL_NOT_SET) {
-            $this->auth->user = $user;
+            $this->auth->setUser($user);
         } else {
             throw new Mira_Core_Exception_BadRequestException("Your API key is not suitable for this operation (trying to change session user). Ask for a 'system' or 'application' API Key to your Vega administrator.");
         }
@@ -311,7 +311,7 @@ class Mira
      */
     public function getUser()
     {
-        return $this->auth->user;
+        return $this->auth->getUser();
     }
     
     /**
