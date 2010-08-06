@@ -259,14 +259,14 @@ class Mira
      * @param string $password
      * @return boolean
      */
-    public function login($email = null, $password = null, $from = null)
+    public function login($email = null, $password = null)
     {
         if ($this->_authLevel > self::AUTHLEVEL_NOT_SET) {
             if ($email == "public@getvega.com") {
                 throw new Mira_Core_Exception_BadRequestException("Cannot login as $email");
             }
         	self::$bus->dispatchEvent(new Mira_Core_Event_LogEvent("Login $email", Zend_Log::DEBUG));
-            return $this->auth->login($email, $password, $from);
+            return $this->auth->login($email, $password);
         } else if (!$email) {
         	self::$bus->dispatchEvent(new Mira_Core_Event_LogEvent("Login from session", Zend_Log::DEBUG));
             return $this->auth->login();
