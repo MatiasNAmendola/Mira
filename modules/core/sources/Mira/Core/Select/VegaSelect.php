@@ -226,7 +226,7 @@ class Mira_Core_Select_VegaSelect extends Mira_Core_Select_Abstract
             }
             // @todo we should group by to vegatype no ? or limit to enabled [to as direction] vegatypes ?
             if (!$fromSet) {
-                $select->joinInner(Mira_Core_Constants::TABLE_VEGATYPE, "id_vgt = id_vgt_prp");
+                $select->joinInner(Mira_Core_Constants::TABLE_VEGATYPE, "vegatype_vgt.id_vgt = id_vgt_prp");
             }
             
             $selects[] = $select;
