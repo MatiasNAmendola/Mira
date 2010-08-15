@@ -152,6 +152,7 @@ class Mira_Core_Select_VegaTypeSelect extends Mira_Core_Select_Abstract
         $ret->addMeta("ownerId", $row["id_usr_vgt"]);
         $ret->addMeta("creationDate", $row["date_created_vgt"]);
         $ret->addMeta("revision", $row["rv_vgt"]);
+        $ret->addMeta("fqn", $row["fqn_vgt"]);
         return $ret;
     }
     
