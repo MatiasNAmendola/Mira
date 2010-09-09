@@ -193,6 +193,7 @@ class Mira
     {
         $bus->registerCommand("*", "Mira_Core_Command_LogCommand", "logBusEvent"); 
         $bus->registerCommand("initialize", "Mira_Core_Command_InitializationCommand");  
+        $bus->registerCommand("log", "Mira_Core_Command_LogCommand", "log");  
     }
     
     /**

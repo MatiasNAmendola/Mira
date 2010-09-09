@@ -31,9 +31,10 @@
  */
 abstract class Mira_Core_Select_Abstract
 {
-    const SELECTOR_NAME = "name";
     const SELECTOR_ID = "id";
     const SELECTOR_REVISION = "revision";
+    const SELECTOR_NAME = "name";
+    const SELECTOR_OWNER= "owner";
     const SELECTOR_STATUS = "status";
     const SELECTOR_SECURITY = "security";
     
@@ -63,6 +64,12 @@ abstract class Mira_Core_Select_Abstract
      * 		<li>$selector: {@link SELECTOR_NAME}</li>
      * 		<li>$value: any string | expression</li>
      * 		<li>$config: "strict" (default) | "permissive" | "expression"</li>
+     * 	</ul>
+     * </li>
+     * <li>
+     * 	<ul>
+     * 		<li>$selector: {@link SELECTOR_OWNER}</li>
+     * 		<li>$value: any integer</li>
      * 	</ul>
      * </li>
      * <li>

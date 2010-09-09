@@ -50,6 +50,7 @@ class Mira_Core_Select_VegaSelect extends Mira_Core_Select_Abstract
     protected $store_idWhere;
     protected $store_revisionWhere;
     protected $store_nameWhere;    
+    protected $store_ownerWhere;    
     protected $store_statusWhere;
     protected $store_securityWhere;
     protected $store_typeWhere;
@@ -97,6 +98,9 @@ class Mira_Core_Select_VegaSelect extends Mira_Core_Select_Abstract
                 break;
             case self::SELECTOR_NAME:
                 $this->store_nameWhere = $args;
+                break;
+            case self::SELECTOR_OWNER:
+                $this->store_ownerWhere = $args;
                 break;
             case self::SELECTOR_STATUS:
                 $this->store_statusWhere = $args;
@@ -176,6 +180,7 @@ class Mira_Core_Select_VegaSelect extends Mira_Core_Select_Abstract
         $select = $this->renderIdWhere($this->store_idWhere, $select);
         $select = $this->renderRevisionWhere($this->store_revisionWhere, $select);
         $select = $this->renderNameWhere($this->store_nameWhere, $select);
+        $select = $this->renderOwnerWhere($this->store_ownerWhere, $select);
         $select = $this->renderSecurityWhere($this->store_securityWhere, $select);
         $select = $this->renderStatusWhere($this->store_statusWhere, $select);
         $select = $this->renderTypeWhere($this->store_typeWhere, $select);
@@ -339,6 +344,19 @@ class Mira_Core_Select_VegaSelect extends Mira_Core_Select_Abstract
             $select->where($this->currentAlias . ".name_vg $value");
         else
             $select->where($this->currentAlias . ".name_vg = ?", $value);    
+        return $select;        
+    }
+    
+    /**
+     * @param array $args
+     * @param Zend_Db_Table_Select $select
+     * @return Zend_Db_Table_Select
+     */
+    protected function renderOwnerWhere($args, $select)
+    {
+        if (!$args) return $select;
+        list ($selector, $value, $config) = $args;
+        $select->where($this->currentAlias . ".id_usr_vg = ?", $value);    
         return $select;        
     }
     

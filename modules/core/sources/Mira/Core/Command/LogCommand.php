@@ -69,7 +69,7 @@ class Mira_Core_Command_LogCommand extends Mira_Utils_Event_AbstractCommand
     public function logBusEvent($event) 
     {
         if (!$this->logger) return;
-        
+        if ($event->name == "log") return;
         $this->logger->log("Bus event: " . $event->name, Zend_Log::DEBUG);
     }
     
