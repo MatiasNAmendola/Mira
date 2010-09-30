@@ -51,6 +51,7 @@ class Mira_Core_Command_InitializationCommand extends Mira_Utils_Event_AbstractC
         $this->initDatabase();
         $this->initLogs();
         $this->initPrimitives();
+        $this->initSession();
     }
 
     // INTERNALS
@@ -142,5 +143,13 @@ class Mira_Core_Command_InitializationCommand extends Mira_Utils_Event_AbstractC
         $app->install();
         $app->start();
         Zend_Registry::set(Mira_Core_Constants::REG_PRIM_APPLICATION, $app);
+    }
+    
+    /**
+     * @access private
+     */
+    private function initSession()
+    {
+        Zend_Session::setOptions($this->_config->session->toArray());   
     }
 }
