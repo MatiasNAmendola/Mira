@@ -150,6 +150,7 @@ class Mira_Core_Command_InitializationCommand extends Mira_Utils_Event_AbstractC
      */
     private function initSession()
     {
+        if ($this->_config != NULL && isset($this->_config->session))
         Zend_Session::setOptions($this->_config->session->toArray());   
     }
 }
