@@ -220,6 +220,8 @@ class Mira_Core_VegaType extends Mira_Utils_Pretty_Row implements Mira_Utils_IVe
 			foreach ($props as $prop) {
 				$this->_currentVegaProperties[$prop->id_prp] = $prop;
 			}
+		} else {
+		    $this->_currentVegaProperties = array();
 		}
 	}
 

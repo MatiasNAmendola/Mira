@@ -55,7 +55,7 @@ CREATE TABLE IF NOT EXISTS `scope_custom_scc` (
   `id_usr_scc` int(11) NOT NULL,
   `role_scc` enum('editor','viewer') NOT NULL,
   PRIMARY KEY (`id_scp_scc`,`id_usr_scc`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Contenu de la table `scope_custom_scc`
@@ -285,7 +285,7 @@ CREATE TABLE IF NOT EXISTS `vega_7` (
   `8` varchar(200) DEFAULT NULL,
   `9` varchar(200) DEFAULT NULL,
   `10` varchar(200) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Contenu de la table `vega_7`
