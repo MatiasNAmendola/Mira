@@ -150,8 +150,6 @@ class Mira_Core_Scope extends Mira_Utils_Pretty_Row
     {
         // @var Zend_Db_Adapter
         $db = $this->getTable()->getAdapter();
-        // @var boolean
-        $isNew = ($this->_lastScopeId == null);
         
         if ($this->isInheriting()) {
             // clean any custom scope already assigned
@@ -188,8 +186,9 @@ class Mira_Core_Scope extends Mira_Utils_Pretty_Row
         
         // we have also to update inheriting children
         // are this update versioned for them ??
-        if (!$isNew) {
-            $this->moveDescendants($this->_lastScopeId);
+        $scopeId = $this->_lastScopeId ? $this->_lastScopeId : $this->id;
+        if ($scopeId) {
+            $this->moveDescendants($scopeId);
         }
         $this->_dirty = false;
         
