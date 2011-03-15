@@ -454,6 +454,12 @@ class Mira
      * @return Mira_Core_User
      */
     public function uemail($email) {return $this->__call("uemail", array($email)); }
+    /**
+     * Retrieve a user by its pseudo
+     * @param string $pseudo
+     * @return Mira_Core_User
+     */
+    public function upseudo($pseudo) {return $this->__call("upseudo", array($pseudo)); }
     
     /**
      * Turn magic function calls into non-magic function calls

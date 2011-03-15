@@ -32,6 +32,7 @@
 class Mira_Core_Select_UserSelect extends Mira_Core_Select_Abstract
 {
     const SELECTOR_EMAIL     = "email";
+    const SELECTOR_PSEUDO     = "pseudo";
     const SELECTOR_TOKEN     = "token";
     const SELECTOR_ACCOUNT   = "account";
     
@@ -43,7 +44,8 @@ class Mira_Core_Select_UserSelect extends Mira_Core_Select_Abstract
     protected $table;
     
     protected $store_idWhere;
-    protected $store_emailWhere;    
+    protected $store_emailWhere;
+    protected $store_pseudoWhere;
     protected $store_tokenWhere;    
     protected $store_accountWhere;
     protected $store_propertyWheres = array();
@@ -96,6 +98,9 @@ class Mira_Core_Select_UserSelect extends Mira_Core_Select_Abstract
             case self::SELECTOR_EMAIL:
                 $this->store_emailWhere = $args;
                 break;
+            case self::SELECTOR_PSEUDO:
+                $this->store_pseudoWhere = $args;
+                break;
             case self::SELECTOR_TOKEN:
                 $this->store_tokenWhere = $args;
                 break;
@@ -127,6 +132,7 @@ class Mira_Core_Select_UserSelect extends Mira_Core_Select_Abstract
         // all renders
         $select = $this->renderIdWhere($this->store_idWhere, $select);
         $select = $this->renderEmailWhere($this->store_emailWhere, $select);
+        $select = $this->renderPseudoWhere($this->store_pseudoWhere, $select);
         $select = $this->renderTokenWhere($this->store_tokenWhere, $select);
         $select = $this->renderAccountWhere($this->store_accountWhere, $select);
         $select = $this->renderPropertyWheres($this->store_propertyWheres, $select);
@@ -167,6 +173,7 @@ class Mira_Core_Select_UserSelect extends Mira_Core_Select_Abstract
         $ret->uid = Mira_Core_User::getUID($row["id_usr"]);
         $ret->name = $row["email_usr"];
         $ret->type = "user";
+        $ret->addMeta("pseudo", $row["pseudo_usr"]);
         return $ret;
     }
     
@@ -234,6 +241,24 @@ class Mira_Core_Select_UserSelect extends Mira_Core_Select_Abstract
             $select->where($this->currentAlias . ".email_usr = ?", $value);    
         return $select;        
     }
+
+     /**
+     * @param array $args
+     * @param Zend_Db_Table_Select $select
+     * @return Zend_Db_Table_Select
+     */
+    protected function renderPseudoWhere($args, $select)
+    {
+        if (!$args) return $select;
+        list ($selector, $value, $config) = $args;
+        if ($config == "permissive")
+            $select->where($this->currentAlias . ".pseudo_usr LIKE '%$value%'");
+        elseif ($config == "expression")
+            $select->where($this->currentAlias . ".pseudo_usr $value");
+        else
+            $select->where($this->currentAlias . ".pseudo_usr = ?", $value);
+        return $select;
+    }
     
     /**
      * @param array $multipleArgs
@@ -299,6 +324,7 @@ class Mira_Core_Select_UserSelect extends Mira_Core_Select_Abstract
     private function getColumnName($prettyName) 
     {
         if ($prettyName == "email") return "email_usr";
+        if ($prettyName == "pseudo") return "pseudo_usr";
         if ($prettyName == "creationDate") return "date_created_usr";
         return $prettyName;
     }

@@ -88,6 +88,7 @@ class Mira_Core_User extends Mira_Utils_Pretty_Row
  	    $properties = array();
  	    $properties[] = new Mira_Utils_Pretty_Property_Delegate($this, "id", false, true, "baseProperty", "id_usr");
  	    $properties[] = new Mira_Utils_Pretty_Property_Delegate($this, "email", false, true, "baseProperty", "email_usr");
+            $properties[] = new Mira_Utils_Pretty_Property_Delegate($this, "pseudo", false, true, "baseProperty", "pseudo_usr");
  	    $properties[] = new Mira_Utils_Pretty_Property_Delegate($this, "account", false, true, "baseProperty", "account_status_usr");
  	    $properties[] = new Mira_Utils_Pretty_Property_Delegate($this, "creationDate", false, true, "baseProperty", "date_created_usr");
  	    $properties[] = new Mira_Utils_Pretty_Property_Delegate($this, "contact", false, true, "contact");
