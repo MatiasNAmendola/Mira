@@ -83,14 +83,15 @@ class Mira_Core_Auth extends Zend_Auth {
     {
         if ($email) {
             $user = $this->api->uemail($email);
-            if ($user) {
+            if (!$user) $user = $this->api->upseudo($email);
+            if($user){
                 $salt_usr = $user->salt_usr;        
                 $data = array ('pass_usr' => $password,
                                'salt_usr' => $salt_usr,
-                               'email_usr' => $email);
+                               'email_usr' => $user->email);
                 $data = Mira_Utils_PasswordEncryption::encryptPassword($data);
                 $password = $data['pass_usr'];
-            	$this->adapter->setIdentity($email);
+            	$this->adapter->setIdentity($user->email);
             	$this->adapter->setCredential($password);
             	$result = parent::authenticate($this->adapter);
             	if ($result->isValid()) {
