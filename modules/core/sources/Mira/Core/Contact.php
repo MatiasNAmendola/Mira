@@ -34,25 +34,20 @@ class Mira_Core_Contact extends Mira_Core_Vega
     {
         $vegaId = $this->id;
         $table = Mira_Core_Db_Tables::getInstance()->getUserTable();
-        return $table->fetchAll("id_vg_usr = $vegaId", null, 1);
+        return $table->fetchRow("id_vg_usr = $vegaId", null, 1);
     }
     
     /**
-     * @return string concatenation of first and last names - "Mathieu Lemaire"
+     * @return string concatenation of full Name - "Mathieu Lemaire"
      */
     public function getFullname()
     {
-    	$f = $this->__get("first name");
-    	$l = $this->__get("last name");
-    	if (Mira_Utils_String::isEmpty($f) && Mira_Utils_String::isEmpty($l)) {
-    		return $this->getPseudoFromEmail();
-    	} elseif (Mira_Utils_String::isEmpty($f)) {
-    		return $l;
-    	} elseif (Mira_Utils_String::isEmpty($l)) {
-    		return $f;
+    	$f = $this->__get("full name");
+    	if (Mira_Utils_String::isEmpty($f)) {
+    		return $this->getUser()->pseudo_usr;
     	} else {
-	    	return  $f . " " . $l;
-	    }
+            return  $f;
+        }
     }
     
     private function getPseudoFromEmail()
