@@ -97,6 +97,7 @@ CREATE TABLE IF NOT EXISTS `user_usr` (
   `email_usr` varchar(40) NOT NULL,
   `pass_usr` varchar(40) NOT NULL,
   `salt_usr` varchar(40) NOT NULL,
+  `pseudo_usr` varchar(40) NOT NULL,
   `account_status_usr` varchar(40) DEFAULT NULL,
   `token_usr` varchar(255) DEFAULT NULL,
   `date_created_usr` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -108,8 +109,8 @@ CREATE TABLE IF NOT EXISTS `user_usr` (
 -- Contenu de la table `user_usr`
 --
 
-INSERT INTO `user_usr` VALUES(1, 1, 'public@getvega.com', '80fced5eaac3847c5a61165305e80425ced8be68', 'a3b148229ff7109975e26d969fa7c9cd8e258d26', 'validated', 1234, '2009-04-14 17:02:38');
-INSERT INTO `user_usr` VALUES(2, 2, 'ayn_nian@hotmail.com', '80fced5eaac3847c5a61165305e80425ced8be68', 'a3b148229ff7109975e26d969fa7c9cd8e258d26', 'validated', 1234, '2009-04-14 17:02:38');
+INSERT INTO `user_usr` VALUES(1, 1, 'public@getvega.com', '80fced5eaac3847c5a61165305e80425ced8be68', 'a3b148229ff7109975e26d969fa7c9cd8e258d26', 'public', 'validated', 1234, '2009-04-14 17:02:38');
+INSERT INTO `user_usr` VALUES(2, 2, 'ayn_nian@hotmail.com', '80fced5eaac3847c5a61165305e80425ced8be68', 'a3b148229ff7109975e26d969fa7c9cd8e258d26', 'andres', 'validated', 1234, '2009-04-14 17:02:38');
 
 -- --------------------------------------------------------
 
