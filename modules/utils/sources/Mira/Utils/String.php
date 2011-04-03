@@ -57,6 +57,11 @@ class Mira_Utils_String {
     {
         return !$value || $value == "";    
     }
+
+    public static function fqnize($value)
+    {
+        return $value ? str_replace(" ", "", strtolower($value)) : "empty";
+    }
     
     public static function randomString($length = 10, $chars = '1234567890') {
     
